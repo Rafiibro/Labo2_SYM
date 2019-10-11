@@ -16,6 +16,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.example.labo2.AsynchroneActivity"
+            android:label="Asynchrone" >
+        </activity>
+        <activity
+            android:name="com.example.labo2.DiffereActivity"
+            android:label="Differe" >
+        </activity>
+        <activity
+            android:name="com.example.labo2.CompresseActivity"
+            android:label="Compresse" >
+        </activity>
+        <activity
+            android:name="com.example.labo2.GraphQLActivity"
+            android:label="GraphQL" >
+        </activity>
+        <activity
+            android:name="com.example.labo2.JsonXMLActivity"
+            android:label="JSON_XML" >
+        </activity>
     </application>
 
 </manifest>
