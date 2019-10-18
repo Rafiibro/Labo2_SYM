@@ -62,21 +62,16 @@ public class SymComManager {
                 }
                 int responseCode = handle.getResponseCode();
 
-                Log.i("CACA: ","fwrf");
-
                 if (responseCode == HttpURLConnection.HTTP_OK) {
 
                     BufferedReader reader = new BufferedReader(new InputStreamReader(handle.getInputStream()));
                     String inputLine;
                     StringBuffer response = new StringBuffer();
 
-                    Log.i("CACA: ","avant");
-
                     while ((inputLine = reader.readLine()) != null) {
                         response.append(inputLine);
                     }
 
-                    Log.i("CACA: ",response.toString());
                     return response.toString();
                 } else {
                     return "error";
@@ -93,7 +88,6 @@ public class SymComManager {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i("CACA: ",result);
             communicationEventListener.handleServerResponse(result);
         }
 
@@ -101,7 +95,7 @@ public class SymComManager {
 
 
     public void sendRequest(String url, String request) {
-        hrat.doInBackground(url, request);
+        hrat.execute(url, request);
     }
 
     public void setCommunicationEventListener(CommunicationEventListener communicationEventListener) {

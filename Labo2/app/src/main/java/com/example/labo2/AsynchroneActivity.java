@@ -21,8 +21,6 @@ public class AsynchroneActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.i("HTTP: ","ahahahahahahahahahahahahahahahahahahahahahahahaha");
-
         // Check permission pour l'IMEI
         if ( ContextCompat.checkSelfPermission( this, Manifest.permission.INTERNET ) != PackageManager.PERMISSION_GRANTED ) {
             // Demande l'autorisation
