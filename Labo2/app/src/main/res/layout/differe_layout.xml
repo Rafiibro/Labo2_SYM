@@ -5,9 +5,21 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
+    <EditText
+        android:id="@+id/request"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Request" />
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send" />
+    <TextView
+        android:id="@+id/textViewAsync"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
         android:text="Differe" />
+
 </LinearLayout>

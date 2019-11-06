@@ -5,9 +5,20 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
+    <Button
+        android:id="@+id/sendXML"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Send XML" />
+    <Button
+        android:id="@+id/sendJSON"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send JSON" />
+    <TextView
+        android:id="@+id/textViewAsync"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
         android:text="XML_JSON" />
 </LinearLayout>
