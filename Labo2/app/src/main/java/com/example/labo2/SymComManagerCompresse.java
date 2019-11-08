@@ -1,27 +1,13 @@
 package com.example.labo2;
 
 import android.os.AsyncTask;
-import android.util.Log;
-import android.util.Xml;
-
-import org.json.JSONObject;
-import org.xmlpull.v1.XmlSerializer;
-
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
@@ -29,6 +15,7 @@ import java.util.zip.InflaterInputStream;
 
 public class SymComManagerCompresse {
 
+    /* Récupération du nom de la classe*/
     private static final String TAG = SymComManagerCompresse.class.getSimpleName();
 
     private List<CommunicationEventListener> theListeners= new LinkedList<>();
@@ -37,7 +24,7 @@ public class SymComManagerCompresse {
 
     private class HttpRequestAsyncTask extends AsyncTask<String, Void, String> {
 
-
+        /* Valeurs a initialiser dans le header */
         private String POSTContentType = "text/plain";
         private String postData;
         private String X_Network = "CSD";
@@ -49,43 +36,56 @@ public class SymComManagerCompresse {
             postData = strUrl[1];
 
             try {
-
                 URL url = new URL(strUrl[0]);
+
+                /* Attente de connection sur le server */
                 while(!isConnectedToServer(strUrl[0], 1000)){
                     status = false;
                 }
                 status = true;
+
+                /* Ouverture de la connection */
                 HttpURLConnection handle = (HttpURLConnection) url.openConnection();
+
+                /* Configuration du header */
                 handle.setRequestMethod("POST");
                 handle.setRequestProperty("Content-Type", POSTContentType);
                 handle.setRequestProperty("X-Network", X_Network);
                 handle.setRequestProperty("X-Content-Encoding", X_Content_Encoding);
 
+                /* Compression de la requete et envoi */
                 if (this.postData != null) {
-
                     DeflaterOutputStream writer = new DeflaterOutputStream(handle.getOutputStream(),  new Deflater(Deflater.DEFAULT_COMPRESSION,true));
                     writer.write(postData.getBytes(), 0, postData.getBytes().length);
                     writer.finish();
                     writer.flush();
                 }
+                /* Récupération de la donnée serveur */
                 int responseCode = handle.getResponseCode();
                 String x_content_encoding = handle.getHeaderField("X-Content-Encoding");
 
-                if (responseCode == HttpURLConnection.HTTP_OK && x_content_encoding.equals("deflate")) {
+                /* Test du code d'erreur en réponse du serveur et de la compression */
+                if (responseCode == HttpURLConnection.HTTP_OK
+                        && x_content_encoding.equals("deflate")) {
+
+                    /* Décompression des datas */
                     InflaterInputStream reader = new InflaterInputStream(handle.getInputStream(), new Inflater(true));
                     ByteArrayOutputStream result = new ByteArrayOutputStream();
                     byte[] buffer = new byte[1024];
+
                     try{
+                        /* Lecture des datas */
                         int value;
                         while((value = reader.read(buffer)) != -1){
                             result.write(buffer,0, value);
                         }
-
+                        /* Retourne la réponse en string */
                         return result.toString("UTF-8");
                     }catch(IOException e){
                         e.printStackTrace();
                         return "error";
-                    }finally {
+                    } finally {
+                        /* Ferme le stream */
                         try {
                             reader.close();
                         } catch (IOException e) {
@@ -94,13 +94,11 @@ public class SymComManagerCompresse {
                         }
                     }
                 } else {
+                    /* Déconnection du serveur */
                     handle.disconnect();
                     return "error";
                 }
-
-
             } catch (Exception e) {
-                // System.out.println("exception in jsonparser class ........");
                 e.printStackTrace();
                 return "error";
             }
@@ -108,6 +106,8 @@ public class SymComManagerCompresse {
         }
 
         @Override
+        /* Cette fonction permet que lorsqu'une requêtes est finie, elle crée un nouveau
+            thread avec la requête suivante à éxecuter */
         protected void onPostExecute(String result) {
             if(requests.size() > 0) {
                 requests.remove(0);
@@ -120,12 +120,12 @@ public class SymComManagerCompresse {
                 connectedTask.execute(requests.get(0).get(0), requests.get(0).get(1), requests.get(0).get(2));
             }
         }
-
     }
 
-
+    /* Cette fonction permet de gérer les requêtes lorsque la connection n'a pas lieu;
+    *   - Si la connection est établie : Lance un nouveau thread avec la requête
+    *   - Si la connection n'est pas établie : Ajoute la requête dans la list de requêtes à éxecuter */
     public void sendRequest(String url, String request, String format) {
-
         if(status){
             HttpRequestAsyncTask hrat = new HttpRequestAsyncTask();
             hrat.execute(url,request, format);
@@ -138,11 +138,13 @@ public class SymComManagerCompresse {
         }
     }
 
+    /* Ajout le Listener au tableau s'il n'est pas encore dedans */
     public void setCommunicationEventListener(CommunicationEventListener listener) {
         if(!theListeners.contains(listener))
             theListeners.add(listener);
     }
 
+    /* Effectue le test de connection sur le serveur */
     public boolean isConnectedToServer(String url, int timeout) {
         try{
             URL myUrl = new URL(url);

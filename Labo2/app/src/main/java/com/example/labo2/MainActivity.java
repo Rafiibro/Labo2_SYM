@@ -1,7 +1,6 @@
 package com.example.labo2;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -18,14 +17,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /* Active le layout de main activity */
         setContentView(R.layout.activity_main);
+
+        /* Indique la policy des threads */
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        /* Initialisation des boutons */
         this.btn_asynchrone = findViewById(R.id.button1);
         this.btn_differe = findViewById(R.id.button2);
         this.btn_jsonXml = findViewById(R.id.button4);
         this.btn_compresse = findViewById(R.id.button5);
         this.btn_graphQL = findViewById(R.id.button6);
+
+        /* Lorsque l'on clique sur un des boutons, lance l'activité correspondante */
 
         btn_asynchrone.setOnClickListener((v) -> {
             Intent intent = new Intent(MainActivity.this, AsynchroneActivity.class);
