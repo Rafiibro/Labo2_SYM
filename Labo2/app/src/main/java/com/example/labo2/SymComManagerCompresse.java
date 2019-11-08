@@ -10,6 +10,7 @@ import org.xmlpull.v1.XmlSerializer;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
+import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 public class SymComManagerCompresse {
@@ -37,24 +39,12 @@ public class SymComManagerCompresse {
 
 
         private String POSTContentType = "text/plain";
-        private String Host = "";
-        private String urlParameters = "";
-        private String UserAgent = "";
-        private String Accept = "text/*";
-        private String Accept_encoding = "deflate";
-        private String Connection = "";
         private String postData;
         private String X_Network = "CSD";
         private String X_Content_Encoding = "deflate";
 
         @Override
         protected String doInBackground(String... strUrl) {
-
-            if(strUrl[2].equals("xml")){
-                POSTContentType = "application/xml";
-            } else if(strUrl[2].equals("json")){
-                POSTContentType = "application/json";
-            }
 
             postData = strUrl[1];
 
@@ -67,15 +57,14 @@ public class SymComManagerCompresse {
                 status = true;
                 HttpURLConnection handle = (HttpURLConnection) url.openConnection();
                 handle.setRequestMethod("POST");
-                handle.setRequestProperty("Accept", Accept);
                 handle.setRequestProperty("Content-Type", POSTContentType);
                 handle.setRequestProperty("X-Network", X_Network);
                 handle.setRequestProperty("X-Content-Encoding", X_Content_Encoding);
 
                 if (this.postData != null) {
 
-                    DeflaterOutputStream writer = new DeflaterOutputStream(handle.getOutputStream(),  new Deflater(Deflater.BEST_COMPRESSION,true));
-                    writer.write(postData.getBytes());
+                    DeflaterOutputStream writer = new DeflaterOutputStream(handle.getOutputStream(),  new Deflater(Deflater.DEFAULT_COMPRESSION,true));
+                    writer.write(postData.getBytes(), 0, postData.getBytes().length);
                     writer.finish();
                     writer.flush();
                 }
@@ -83,19 +72,27 @@ public class SymComManagerCompresse {
                 String x_content_encoding = handle.getHeaderField("X-Content-Encoding");
 
                 if (responseCode == HttpURLConnection.HTTP_OK && x_content_encoding.equals("deflate")) {
-                    InflaterInputStream reader = new InflaterInputStream(handle.getInputStream());
-                    StringBuffer response = new StringBuffer();
-                    int count;
+                    InflaterInputStream reader = new InflaterInputStream(handle.getInputStream(), new Inflater(true));
+                    ByteArrayOutputStream result = new ByteArrayOutputStream();
                     byte[] buffer = new byte[1024];
-                    count = reader.read(buffer);
-                    while (count != -1) {
-                        response.append(buffer.toString());
-                        count = reader.read(buffer);
+                    try{
+                        int value;
+                        while((value = reader.read(buffer)) != -1){
+                            result.write(buffer,0, value);
+                        }
+
+                        return result.toString("UTF-8");
+                    }catch(IOException e){
+                        e.printStackTrace();
+                        return "error";
+                    }finally {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            return "error";
+                        }
                     }
-
-                    handle.disconnect();
-
-                    return response.toString();
                 } else {
                     handle.disconnect();
                     return "error";

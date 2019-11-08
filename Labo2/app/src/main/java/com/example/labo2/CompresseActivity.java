@@ -50,7 +50,7 @@ public class CompresseActivity extends AppCompatActivity{
                         }
                     }
             );
-            mcm.sendRequest("http://sym.iict.ch/rest/json", "zgeg", "json");
+            mcm.sendRequest("http://sym.iict.ch/rest/txt", "zgeg", "json");
         }
     }
 }
