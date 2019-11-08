@@ -1,5 +1,6 @@
 package com.example.labo2;
 
+/* Definition d'une personne, utilisé dans GraphQL*/
 public class Personne {
     private String name = "";
     private String firstname = "";

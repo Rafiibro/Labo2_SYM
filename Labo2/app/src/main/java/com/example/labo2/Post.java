@@ -1,5 +1,6 @@
 package com.example.labo2;
 
+/* Definition d'un Post, utilisé dans GraphQL */
 public class Post {
     private int id;
     private String title;

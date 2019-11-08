@@ -1,27 +1,18 @@
 package com.example.labo2;
 
 import android.os.AsyncTask;
-import android.util.Log;
-import android.util.Xml;
-
-import org.json.JSONObject;
-import org.xmlpull.v1.XmlSerializer;
-
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class SymComManager {
 
+    /* Récupération du nom de la classe*/
     private static final String TAG = SymComManager.class.getSimpleName();
 
     private List<CommunicationEventListener> theListeners= new LinkedList<>();
@@ -30,7 +21,7 @@ public class SymComManager {
 
     private class HttpRequestAsyncTask extends AsyncTask<String, Void, String> {
 
-
+        /* Valeurs a initialiser dans le header */
         private String POSTContentType = "text/plain";
         private String Host = "";
         private String urlParameters = "";
@@ -51,44 +42,52 @@ public class SymComManager {
            postData = strUrl[1];
 
             try {
-
                 URL url = new URL(strUrl[0]);
+
+                /* Attente de connection sur le server */
                 while(!isConnectedToServer(strUrl[0], 1000)){
                     status = false;
                 }
                 status = true;
+
+                /* Ouverture de la connection */
                 HttpURLConnection handle = (HttpURLConnection) url.openConnection();
+
+                /* Configuration du header */
                 handle.setRequestMethod("POST");
                 handle.setRequestProperty("Accept", Accept);
                 handle.setRequestProperty("Content-Type", POSTContentType);
 
-
+                /* Envoie de la requête */
                 if (this.postData != null) {
                     OutputStreamWriter writer = new OutputStreamWriter(handle.getOutputStream());
                     writer.write(postData);
                     writer.flush();
                 }
+
+                /* Récupération de la donnée serveur */
                 int responseCode = handle.getResponseCode();
 
+                /* Test du code d'erreur en réponse du serveur */
                 if (responseCode == HttpURLConnection.HTTP_OK) {
 
+                    /* Lecture des datas */
                     BufferedReader reader = new BufferedReader(new InputStreamReader(handle.getInputStream()));
                     String inputLine;
                     StringBuffer response = new StringBuffer();
-
                     while ((inputLine = reader.readLine()) != null) {
                         response.append(inputLine);
                     }
 
+                    /* Déconnection du serveur */
                     handle.disconnect();
 
+                    /* Retourne la réponse en string */
                     return response.toString();
                 } else {
                     handle.disconnect();
                     return "error";
                 }
-
-
             } catch (Exception e) {
                 // System.out.println("exception in jsonparser class ........");
                 e.printStackTrace();
@@ -97,6 +96,8 @@ public class SymComManager {
 
         }
 
+        /* Cette fonction permet que lorsqu'une requêtes est finie, elle crée un nouveau
+            thread avec la requête suivante à éxecuter */
         @Override
         protected void onPostExecute(String result) {
             if(requests.size() > 0) {
@@ -115,9 +116,10 @@ public class SymComManager {
 
     }
 
-
+    /* Cette fonction permet de gérer les requêtes lorsque la connection n'a pas lieu;
+     *   - Si la connection est établie : Lance un nouveau thread avec la requête
+     *   - Si la connection n'est pas établie : Ajoute la requête dans la list de requêtes à éxecuter */
     public void sendRequest(String url, String request, String format) {
-
         if(status){
             HttpRequestAsyncTask hrat = new HttpRequestAsyncTask();
             hrat.execute(url,request, format);
@@ -130,11 +132,13 @@ public class SymComManager {
         }
     }
 
+    /* Ajout le Listener au tableau s'il n'est pas encore dedans */
     public void setCommunicationEventListener(CommunicationEventListener listener) {
         if(!theListeners.contains(listener))
             theListeners.add(listener);
     }
 
+    /* Effectue le test de connection sur le serveur */
     public boolean isConnectedToServer(String url, int timeout) {
         try{
             URL myUrl = new URL(url);
