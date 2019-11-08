@@ -34,7 +34,7 @@ public class DiffereActivity extends AppCompatActivity{
         this.send = findViewById(R.id.button);
         this.text_asynchrone.setMovementMethod(new ScrollingMovementMethod());
 
-        // Check permission pour l'IMEI
+        // Check permission pour l'envois
         if ( ContextCompat.checkSelfPermission( this, Manifest.permission.INTERNET ) != PackageManager.PERMISSION_GRANTED ) {
             // Demande l'autorisation
             Dexter.withActivity(this)
@@ -42,7 +42,7 @@ public class DiffereActivity extends AppCompatActivity{
                     .withListener(new BasePermissionListener())
                     .check();
         } else {
-            // Show the welcome screen / login authentication dialog
+            // Creation du handler pour la reponse
             SymComManager mcm = new SymComManager() ;
             mcm.setCommunicationEventListener(
                     new CommunicationEventListener(){
@@ -61,6 +61,7 @@ public class DiffereActivity extends AppCompatActivity{
                     }
             );
 
+            // Enois de la requete lors de l'appuis sur le bouton send
             send.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     mcm.sendRequest("http://sym.iict.ch/rest/txt", req.getText().toString(), "json");

@@ -1,16 +1,12 @@
 package com.example.labo2;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -26,13 +22,12 @@ public class JsonXMLActivity extends AppCompatActivity{
     private Button sendXML = null;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Show the welcome screen / login authentication dialog
         setContentView(R.layout.json_xml_layout);
         this.text_asynchrone = (TextView) findViewById(R.id.textViewAsync);
         this.sendJSON =  findViewById(R.id.sendJSON);
         this.sendXML = findViewById(R.id.sendXML);
 
-        // Check permission pour l'IMEI
+        // Check permission pour l'envois
         if ( ContextCompat.checkSelfPermission( this, Manifest.permission.INTERNET ) != PackageManager.PERMISSION_GRANTED ) {
             // Demande l'autorisation
             Dexter.withActivity(this)
@@ -40,7 +35,7 @@ public class JsonXMLActivity extends AppCompatActivity{
                     .withListener(new BasePermissionListener())
                     .check();
         } else {
-            // Show the welcome screen / login authentication dialog
+            // Creation du handler pour la reponse
             SymComManager mcm = new SymComManager() ;
             mcm.setCommunicationEventListener(
                     new CommunicationEventListener(){
@@ -58,6 +53,7 @@ public class JsonXMLActivity extends AppCompatActivity{
                     }
             );
 
+            // Enois de la requete json lors de l'appuis sur le bouton send
             sendJSON.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     String req = FormatRequest.jsonRequest("JSON test");
@@ -65,6 +61,7 @@ public class JsonXMLActivity extends AppCompatActivity{
                 }
             });
 
+            // Enois de la requete xml lors de l'appuis sur le bouton send
             sendXML.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     List<Personne> personnes = new ArrayList<Personne>();

@@ -1,5 +1,8 @@
 package com.example.labo2;
 
+/**
+ * Classe definissant les auteurs
+  */
 public class Autors {
     private String firstname;
     private String lastname;

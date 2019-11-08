@@ -1,24 +1,25 @@
 package com.example.labo2;
 
-import android.net.LocalSocketAddress;
-
-import org.jdom2.Attribute;
 import org.jdom2.DocType;
 import org.jdom2.output.Format;
 import org.json.JSONObject;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.Namespace;
 import org.jdom2.output.XMLOutputter;
 
-
-import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class pour le parse des requetes
+ */
 public class FormatRequest {
+    /**
+     * Parse une requete en json dans ce format:
+     * data: request
+     */
     public static String jsonRequest(String request){
         JSONObject jsonData;
         Map<String, String> mapData = new HashMap<>();
@@ -27,6 +28,9 @@ public class FormatRequest {
         return jsonData.toString();
     }
 
+    /**
+     * Parse une liste de personnes en xml dans le format demande
+     */
     public static String xmlRequest(List<Personne> personnes){
        Document doc = new Document();
         final DocType docType = new DocType("directory", "http://sym.iict.ch/directory.dtd");
@@ -43,9 +47,8 @@ public class FormatRequest {
             person.addContent(phone);
             doc.getRootElement().addContent(person);
         }
-        //JDOM document is ready now, lets write it to file now
+
         XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-        //output xml to console for debugging
 
        return xmlOutputter.outputString(doc);
     }

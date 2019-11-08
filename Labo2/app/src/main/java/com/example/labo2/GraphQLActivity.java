@@ -25,14 +25,13 @@ public class GraphQLActivity extends AppCompatActivity{
     private TextView text = null;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Show the welcome screen / login authentication dialog
         setContentView(R.layout.graph_ql_layout);
         this.spin = findViewById(R.id.spinner);
         this.btn =  findViewById(R.id.showPost);
         this.text = findViewById(R.id.text);
         this.text.setMovementMethod(new ScrollingMovementMethod());
 
-        // Check permission pour l'IMEI
+        // Check permission pour l'envois
         if ( ContextCompat.checkSelfPermission( this, Manifest.permission.INTERNET ) != PackageManager.PERMISSION_GRANTED ) {
             // Demande l'autorisation
             Dexter.withActivity(this)
@@ -40,12 +39,15 @@ public class GraphQLActivity extends AppCompatActivity{
                     .withListener(new BasePermissionListener())
                     .check();
         } else {
+            // Recuperation des auteurs et update de la dropdown
             List<Autors> authors = GraphQLApi.allAutors();
             ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(this,
                     android.R.layout.simple_spinner_dropdown_item,
                     authors);
             spin.setAdapter(spinnerArrayAdapter);
 
+            // Affiche tous les posts de l'auteurs selectionne dans la dropdown
+            // lors du click sur le bouton
             btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     text.setText("");

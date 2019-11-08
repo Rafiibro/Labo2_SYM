@@ -1,14 +1,5 @@
 package com.example.labo2;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.view.View;
-
-import androidx.core.content.ContextCompat;
-
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.listener.single.BasePermissionListener;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +14,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Classe recuperant les donnees de la base de donnees
+ */
 public class GraphQLApi {
+    /**
+     * Retourne la liste des auteurs dans la base de donnees
+     */
     public static List<Autors> allAutors(){
         List<Autors> result = new ArrayList<Autors>();
         JSONObject jsonData;
@@ -47,6 +44,9 @@ public class GraphQLApi {
         }
     }
 
+    /**
+     * Retourne la liste des posts d'un auteur
+     */
     public static List<Post> allPostByAutor(int autorId){
         List<Post> result = new ArrayList<Post>();
         JSONObject jsonData;
@@ -70,6 +70,9 @@ public class GraphQLApi {
         }
     }
 
+    /**
+     * Envois de la requete graphql
+     */
     private static String sendRequest(String urlStr, String data){
 
         String POSTContentType = "application/json";
