@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ public class AsynchroneActivity extends AppCompatActivity{
         setContentView(R.layout.asynchrone_layout);
 
         this.text_asynchrone = (TextView) findViewById(R.id.textViewAsync);
+        this.text_asynchrone.setMovementMethod(new ScrollingMovementMethod());
 
         // Check permission pour l'IMEI
         if ( ContextCompat.checkSelfPermission( this, Manifest.permission.INTERNET ) != PackageManager.PERMISSION_GRANTED ) {
