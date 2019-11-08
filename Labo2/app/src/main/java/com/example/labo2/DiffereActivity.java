@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +32,7 @@ public class DiffereActivity extends AppCompatActivity{
         this.text_asynchrone = (TextView) findViewById(R.id.textViewAsync);
         this.req =  findViewById(R.id.request);
         this.send = findViewById(R.id.button);
+        this.text_asynchrone.setMovementMethod(new ScrollingMovementMethod());
 
         // Check permission pour l'IMEI
         if ( ContextCompat.checkSelfPermission( this, Manifest.permission.INTERNET ) != PackageManager.PERMISSION_GRANTED ) {
@@ -49,7 +51,8 @@ public class DiffereActivity extends AppCompatActivity{
                                 @Override
                                 public void run() {
                                     // Update UI widget
-                                    DiffereActivity.text_asynchrone.append(response);
+                                    DiffereActivity.text_asynchrone.append("Response: \n");
+                                    DiffereActivity.text_asynchrone.append(response + "\n\n");
                                 }
                             });
                             /** Message has been handled...*/

@@ -103,7 +103,9 @@ public class SymComManager {
                 requests.remove(0);
             }
             for(CommunicationEventListener cel: theListeners) {
-                if(cel.handleServerResponse(result)) break;
+                if(cel.handleServerResponse(result)){
+                    break;
+                }
             }
             if(requests.size() > 0){
                 HttpRequestAsyncTask connectedTask = new HttpRequestAsyncTask();

@@ -5,9 +5,20 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textViewAsync"
+    <Spinner
+        android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Graph QL" />
+        android:spinnerMode="dropdown" />
+    <Button
+        android:id="@+id/showPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Post" />
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars = "vertical"
+        android:text="Show Post" />
 </LinearLayout>
