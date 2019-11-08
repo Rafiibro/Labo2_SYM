@@ -1,3 +1,6 @@
+/**
+ * Auteurs: Bacso, Vuagniaux, Da Cunha
+ */
 package com.example.labo2;
 
 import android.os.AsyncTask;
@@ -23,11 +26,7 @@ public class SymComManager {
 
         /* Valeurs a initialiser dans le header */
         private String POSTContentType = "text/plain";
-        private String Host = "";
-        private String urlParameters = "";
-        private String UserAgent = "";
         private String Accept = "text/*";
-        private String Connection = "";
         private String postData;
 
         @Override

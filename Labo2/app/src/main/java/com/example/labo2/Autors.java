@@ -1,3 +1,6 @@
+/**
+ * Auteurs: Bacso, Vuagniaux, Da Cunha
+ */
 package com.example.labo2;
 
 /**
