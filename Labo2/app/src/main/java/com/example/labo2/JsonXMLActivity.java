@@ -65,9 +65,9 @@ public class JsonXMLActivity extends AppCompatActivity{
             sendXML.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     List<Personne> personnes = new ArrayList<Personne>();
-                    Personne pers1 = new Personne("Vuagniaux", "Remy", "Male", "1112223344", "home");
-                    Personne pers2 = new Personne("Bacso", "Gaetan", "Male", "1112223344", "work");
-                    Personne pers3 = new Personne("Da Cunha", "Rafael", "Male", "1112223344", "mobile");
+                    Personne pers1 = new Personne("Vuagniaux", "Remy", "Female", "1112223344", "Rageux");
+                    Personne pers2 = new Personne("Bacso", "Gaetan", "Others", "1112223344", "Bard");
+                    Personne pers3 = new Personne("Da Cunha", "Rafael", "Male", "1112223344", "Etranger");
                     personnes.add(pers1);
                     personnes.add(pers2);
                     personnes.add(pers3);
